@@ -6,13 +6,21 @@ import java.text.ParseException;
 public class ACBMain {
 
 	public static void main(String[] args) throws IOException, SQLException, ParseException {
-		ACBMenu menu = new ACBMenu();
+
 		
 		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
 		Connection c = connectionFactory.connect();
 
 		TeamController teamController = new TeamController(c);
 		PlayerController playerController = new PlayerController(c);
+
+		int region = 0;
+		int personaje = 0;
+		int arma = 0;
+
+		teamController.borrartodo();
+
+		ACBMenu menu = new ACBMenu();
 		
 		
 //		Connection conn = null;
@@ -34,17 +42,30 @@ public class ACBMain {
 		while (option > 0 && option < 12) {
 			switch (option) {
 			case 1:
-				teamController.mostrarregion();
+				if (region < 0) {
+					teamController.mostrarregion();
+				}else{
+					System.out.println("No se ha encontrado ninguna región");
+				}
 				// dbaccessor.mostraAutors();
 				break;
 
 			case 2:
-				teamController.mostrarpersonaje();
+				if(personaje < 0){
+					teamController.mostrarpersonaje();
+				}else{
+					System.out.println("No se ha encontrado ningun personaje creado");
+				}
+
 				// dbaccessor.mostraRevistes();
 				break;
 
 			case 3:
-				teamController.mostrararmas();
+				if(arma < 0) {
+					teamController.mostrararmas();
+				}else{
+					System.out.println("No se ha encontrado ninguna arma registrada");
+				}
 				// dbaccessor.mostraRevistesArticlesAutors();
 				break;
 
@@ -64,6 +85,7 @@ public class ACBMain {
 				break;
 
 			case 7:
+				teamController.readPersonajesFromCSVAndInsert();
 				// dbaccessor.actualitzarTitolRevistes(conn);
 				break;
 
@@ -82,7 +104,21 @@ public class ACBMain {
 			case 11:
 				// dbaccessor.sortir();
 				break;
-
+				case 12:
+					// dbaccessor.sortir();
+					break;
+				case 13:
+					break;
+				case 14:
+					break;
+				case 15:
+					break;
+				case 16:
+					teamController.borrartodo();
+					break;
+				case 17:
+					System.exit(0);
+					break;
 			default:
 				System.out.println("Introdueixi una de les opcions anteriors");
 				break;
