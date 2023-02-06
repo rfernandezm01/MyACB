@@ -110,15 +110,31 @@ public class ACBMain {
 					// dbaccessor.sortir();
 					break;
 				case 13:
-					teamController.borrarPersonaje();
+					if(personaje < 0){
+						teamController.borrarPersonaje();
+						personaje = 0;
+					}else{
+						System.out.println("No existe ninguna tabla Personaje");
+					}
 					break;
 				case 14:
-					teamController.borrarRegion();
+					if(region < 0){
+						teamController.borrarRegion();
+						region = 0;
+					}else{
+						System.out.println("No existe ninguna tabla Region");
+					}
 					break;
 				case 15:
-					teamController.borrarArmas();
+					if(arma < 0) {
+						teamController.borrarArmas();
+						arma = 0;
+					}else{
+						System.out.println("No existe ninguna tabla Armas");
+					}
 					break;
 				case 16:
+
 					teamController.borrartodo();
 					break;
 				case 17:
