@@ -90,10 +90,12 @@ public class ACBMain {
 				break;
 
 			case 8:
+				teamController.readRegionFromCSVAndInsert();
 				// dbaccessor.afegeixArticleARevista(conn);
 				break;
 
 			case 9:
+				teamController.readArmasFromCSVAndInsert();
 				// dbaccessor.desassignaArticleARevista(conn);
 				break;
 
@@ -108,10 +110,13 @@ public class ACBMain {
 					// dbaccessor.sortir();
 					break;
 				case 13:
+					teamController.borrarPersonaje();
 					break;
 				case 14:
+					teamController.borrarRegion();
 					break;
 				case 15:
+					teamController.borrarArmas();
 					break;
 				case 16:
 					teamController.borrartodo();

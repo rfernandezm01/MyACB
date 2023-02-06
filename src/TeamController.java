@@ -37,6 +37,37 @@ public class TeamController {
 		st.close();
 	}
 
+	public void borrarRegion() throws SQLException, IOException {
+
+		Statement st = connection.createStatement();
+		ResultSet rs = null;
+
+		try { st.executeUpdate("DROP TABLE Region");} catch (SQLException e) {}
+
+		rs.close();
+		st.close();
+	}
+
+	public void borrarPersonaje() throws SQLException, IOException {
+
+		Statement st = connection.createStatement();
+		ResultSet rs = null;
+
+		try { st.executeUpdate("DROP TABLE Personaje");} catch (SQLException e) {}
+
+		rs.close();
+		st.close();
+	}
+	public void borrarArmas() throws SQLException, IOException {
+
+		Statement st = connection.createStatement();
+		ResultSet rs = null;
+
+		try { st.executeUpdate("DROP TABLE Armas");} catch (SQLException e) {}
+
+		rs.close();
+		st.close();
+	}
 	public void mostrarregion() throws SQLException, IOException {
 
 		Statement st = connection.createStatement();
@@ -110,7 +141,7 @@ public class TeamController {
 		Statement st = connection.createStatement();
 		ResultSet rs;
 
-		st.executeUpdate("CREATE TABLE Armas (ArmaID integer PRIMARY KEY, Tipodearma varchar(20), Nombre varchar(30), Numeroestrellas integer, PuntosAtaque integer, Personaje varchar(30), PersonajeID integer)" );
+		st.executeUpdate("CREATE TABLE Armas (ArmaID integer PRIMARY KEY, Tipodearma varchar(20), Nombre varchar(30), Numeroestrellas integer, PuntosAtaque integer, PersonajeID integer)" );
 
 		st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectPersonaje “+ “FOREIGN KEY (PersonajeID) REFERENCES Personaje(PersonajeID)");
 
@@ -147,6 +178,58 @@ public class TeamController {
 		pst.close();
 	}
 
+	public void readRegionFromCSVAndInsert () throws SQLException {
+
+		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("Regiónes.csv");
+
+		String sql = "INSERT INTO Region (RegionID,Nombre,Habitantes,Elemento,Nombrearconte,Mundo,PersonajeID) VALUES (?,?,?,?,?,?,?)";
+		PreparedStatement pst = connection.prepareStatement(sql);
+
+		// Elimina la fila de las cabeceras
+		personajes.remove(0);
+
+		for (ArrayList<String> fila : personajes) {
+
+			pst.clearParameters();
+			pst.setInt(1, Integer.parseInt(fila.get(0)));
+			pst.setString(2, fila.get(1));
+			pst.setInt(3, Integer.parseInt(fila.get(2)));
+			pst.setString(4, fila.get(3));
+			pst.setString(5, fila.get(4));
+			pst.setString(6, fila.get(5));
+			pst.setInt(8, Integer.parseInt(fila.get(6)));
+			pst.executeUpdate();
+
+		}
+
+		pst.close();
+	}
+
+	public void readArmasFromCSVAndInsert () throws SQLException {
+
+		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("Armas.csv");
+
+		String sql = "INSERT INTO Personaje (ArmaID,Tipodearma,Nombre,Numeroestrellas,PuntosAtaque,PersonajeID) VALUES (?,?,?,?,?,?)";
+		PreparedStatement pst = connection.prepareStatement(sql);
+
+		// Elimina la fila de las cabeceras
+		personajes.remove(0);
+
+		for (ArrayList<String> fila : personajes) {
+
+			pst.clearParameters();
+			pst.setInt(1, Integer.parseInt(fila.get(0)));
+			pst.setString(2, fila.get(1));
+			pst.setString(3, fila.get(2));
+			pst.setInt(4, Integer.parseInt(fila.get(3)));
+			pst.setInt(5, Integer.parseInt(fila.get(4)));
+			pst.setInt(6, Integer.parseInt(fila.get(5)));
+			pst.executeUpdate();
+
+		}
+
+		pst.close();
+	}
 
 	// Java code to illustrate reading a
 // all data at once
