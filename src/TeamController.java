@@ -20,7 +20,7 @@ public class TeamController {
 	public void DeleteRegion () throws SQLException {
 		//esto borra las regiones dentro de la tabla Regiones
 
-		ArrayList<ArrayList<String>> regiones =  readAllDataAtOnce("Regiónes.csv");
+		ArrayList<ArrayList<String>> regiones =  readAllDataAtOnce("src/Regiónes.csv");
 
 		String sql = "DELETE Region (RegionID,Nombre,Habitantes,Elemento,Nombrearconte,Mundo,PersonajeID) VALUES (?,?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
@@ -48,7 +48,7 @@ public class TeamController {
 	public void DeletePersonajes () throws SQLException {
 		//esto borra los Personajes dentro de la tabla Personajes
 
-		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("personajes.csv");
+		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("src/personajes.csv");
 
 		String sql = "DELETE Personaje (PersonajeID,Nombre,Numeroestrellas,TipodeArma,Elemento,Sexo,Región,ArmaID,RegiónID) VALUES (?,?,?,?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
@@ -78,7 +78,7 @@ public class TeamController {
 	public void DeleteArmas() throws SQLException, IOException {
 		//esto borra las Armas dentro de la tabla Armas
 
-		ArrayList<ArrayList<String>> armas =  readAllDataAtOnce("Armas.csv");
+		ArrayList<ArrayList<String>> armas =  readAllDataAtOnce("src/Armas.csv");
 
 		String sql = "DELETE Armas (ArmaID,Tipodearma,Nombre,Numeroestrellas,PuntosAtaque,PersonajeID) VALUES (?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
@@ -107,7 +107,6 @@ public class TeamController {
 		//esto borra toda la base de datos.
 
 		Statement st = connection.createStatement();
-		ResultSet rs = null;
 
 		try { st.executeUpdate("ALTER TABLE Personaje DROP CONSTRAINT connectPersonaje");}
 		catch (SQLException e) {}
@@ -120,8 +119,6 @@ public class TeamController {
 		try { st.executeUpdate("DROP TABLE Armas");} catch (SQLException e) {}
 
 
-
-		rs.close();
 		st.close();
 	}
 
@@ -129,11 +126,11 @@ public class TeamController {
 		//borra la tabla region
 
 		Statement st = connection.createStatement();
-		ResultSet rs = null;
+
 
 		try { st.executeUpdate("DROP TABLE Region");} catch (SQLException e) {}
 
-		rs.close();
+
 		st.close();
 	}
 
@@ -141,22 +138,22 @@ public class TeamController {
 		//borra la tabla personajes
 
 		Statement st = connection.createStatement();
-		ResultSet rs = null;
+
 
 		try { st.executeUpdate("DROP TABLE Personaje");} catch (SQLException e) {}
 
-		rs.close();
+
 		st.close();
 	}
 	public void borrarArmas() throws SQLException, IOException {
 		//borra la tabla armas
 
 		Statement st = connection.createStatement();
-		ResultSet rs = null;
+
 
 		try { st.executeUpdate("DROP TABLE Armas");} catch (SQLException e) {}
 
-		rs.close();
+
 		st.close();
 	}
 	public void mostrarregion() throws SQLException, IOException {
@@ -197,11 +194,12 @@ public class TeamController {
 	public void crearRegion() throws SQLException, IOException {
 		//creamos la tabla region
 		Statement st = connection.createStatement();
-		ResultSet rs;
 
 		st.executeUpdate("CREATE TABLE Region (RegionID integer PRIMARY KEY, Nombre varchar(30), Habitantes integer, Elemento varchar(20), Nombrearconte varchar(30), Mundo varchar(20), PersonajeID integer)" );
 
-		st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectPersonaje “+ “FOREIGN KEY (PersonajeID) REFERENCES Personaje(PersonajeID)");
+		try { st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectPersonaje + FOREIGN KEY (PersonajeID) REFERENCES Personaje(PersonajeID)");}
+		catch (SQLException e) {}
+
 		st.close();
 
 	}
@@ -209,12 +207,13 @@ public class TeamController {
 	public void crearPersonaje() throws SQLException, IOException {
 		//creamos la tabla personajes
 		Statement st = connection.createStatement();
-		ResultSet rs;
 
 		st.executeUpdate("CREATE TABLE Personaje (PersonajeID integer PRIMARY KEY, Nombre varchar(30),Numeroestrellas integer, TipodeArma varchar(20), Elemento varchar(20), Sexo varchar(20),Región varchar(30), ArmaID Integer, RegiónID integer)" );
 
-		st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectarma “+ “FOREIGN KEY (ArmaID) REFERENCES Armas(ArmaID)" );
-		st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectRegion “+ “FOREIGN KEY (RegionID) REFERENCES Region(RegionID)" );
+		try { st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectarma + FOREIGN KEY (ArmaID) REFERENCES Armas(ArmaID)");}
+		catch (SQLException e) {}
+		try { st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectRegion + FOREIGN KEY (RegionID) REFERENCES Region(RegionID)");}
+		catch (SQLException e) {}
 
 
 		st.close();
@@ -222,11 +221,11 @@ public class TeamController {
 	public void crearArma() throws SQLException, IOException {
 		//creamos la tabla armas
 		Statement st = connection.createStatement();
-		ResultSet rs;
 
 		st.executeUpdate("CREATE TABLE Armas (ArmaID integer PRIMARY KEY, Tipodearma varchar(20), Nombre varchar(30), Numeroestrellas integer, PuntosAtaque integer, PersonajeID integer)" );
+		try { st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectPersonaje + FOREIGN KEY (PersonajeID) REFERENCES Personaje(PersonajeID)");}
+		catch (SQLException e) {}
 
-		st.executeUpdate("ALTER TABLE Personaje ADD CONSTRAINT connectPersonaje “+ “FOREIGN KEY (PersonajeID) REFERENCES Personaje(PersonajeID)");
 
 		st.close();
 	}
@@ -235,13 +234,12 @@ public class TeamController {
 	public void readPersonajesFromCSVAndInsert () throws SQLException {
 		//creamos personajes dentro de la tabla personajes
 
-		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("personajes.csv");
+		ArrayList<ArrayList<String>> personajes = readAllDataAtOnce("src/personajes.csv");
 
 		String sql = "INSERT INTO Personaje (PersonajeID,Nombre,Numeroestrellas,TipodeArma,Elemento,Sexo,Región,ArmaID,RegiónID) VALUES (?,?,?,?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
 
-		// Elimina la fila de las cabeceras
-		personajes.remove(0);
+
 
 		for (ArrayList<String> fila : personajes) {
 
@@ -265,13 +263,12 @@ public class TeamController {
 	public void readRegionFromCSVAndInsert () throws SQLException {
 		//creamos las regiones dentro de la tabla regiones
 
-		ArrayList<ArrayList<String>> regiones =  readAllDataAtOnce("Regiónes.csv");
+		ArrayList<ArrayList<String>> regiones = readAllDataAtOnce("src/Regiónes.csv");
 
 		String sql = "INSERT INTO Region (RegionID,Nombre,Habitantes,Elemento,Nombrearconte,Mundo,PersonajeID) VALUES (?,?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
 
-		// Elimina la fila de las cabeceras
-		regiones.remove(0);
+
 
 		for (ArrayList<String> fila : regiones) {
 
@@ -289,17 +286,16 @@ public class TeamController {
 
 		pst.close();
 	}
+	//psql -h 192.168.22.126 -U usuario -d ddbb
 
 	public void readArmasFromCSVAndInsert () throws SQLException {
 		//creamos las armas dentro de la tabla armas
 
-		ArrayList<ArrayList<String>> armas =  readAllDataAtOnce("Armas.csv");
+		ArrayList<ArrayList<String>> armas = readAllDataAtOnce("src/Armas.csv");
 
 		String sql = "INSERT INTO Armas (ArmaID,Tipodearma,Nombre,Numeroestrellas,PuntosAtaque,PersonajeID) VALUES (?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
 
-		// Elimina la fila de las cabeceras
-		armas.remove(0);
 
 		for (ArrayList<String> fila : armas) {
 
