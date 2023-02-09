@@ -7,7 +7,7 @@ public class ACBMain {
 
 	public static void main(String[] args) throws IOException, SQLException, ParseException {
 
-		
+
 		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
 		Connection c = connectionFactory.connect();
 
@@ -30,8 +30,8 @@ public class ACBMain {
 
 
 		ACBMenu menu = new ACBMenu();
-		
-		
+
+
 //		Connection conn = null;
 //		Identity identity;
 //		int option;
@@ -49,116 +49,123 @@ public class ACBMain {
 
 		//Aqui enlazamos el menu de mainmenu. Para que nos muestre el menu.
 		int option = menu.mainMenu();
-		while (option > 0 && option < 12) {
+		while (option > 0 && option < 17) {
 			switch (option) {
-			case 1:
-				// en esta opcion nos mostrara la tabla region pero eso si esta creada.
-				if (region < 0) {
-					teamController.mostrarregion();
-				}else{
-					System.out.println("No se ha encontrado ninguna región");
-				}
-				// dbaccessor.mostraAutors();
-				break;
+				case 1:
+					// en esta opcion nos mostrara la tabla region pero eso si esta creada.
+					if (region > 0) {
+						teamController.mostrarregion();
+					}else{
+						System.out.println("No se ha encontrado ninguna región");
+					}
+					// dbaccessor.mostraAutors();
+					break;
 
-			case 2:
-				// en esta opcion nos mostrara la tabla personaje pero eso si esta creada.
-				if(personaje < 0){
-					teamController.mostrarpersonaje();
-				}else{
-					System.out.println("No se ha encontrado ningun personaje creado");
-				}
+				case 2:
+					// en esta opcion nos mostrara la tabla personaje pero eso si esta creada.
+					if(personaje > 0){
+						teamController.mostrarpersonaje();
+					}else{
+						System.out.println("No se ha encontrado ningun personaje creado");
+					}
 
-				// dbaccessor.mostraRevistes();
-				break;
+					// dbaccessor.mostraRevistes();
+					break;
 
-			case 3:
-				// en esta opcion nos mostrara la tabla armas pero eso si esta creada.
-				if(arma < 0) {
-					teamController.mostrararmas();
-				}else{
-					System.out.println("No se ha encontrado ninguna arma registrada");
-				}
-				// dbaccessor.mostraRevistesArticlesAutors();
-				break;
+				case 3:
+					// en esta opcion nos mostrara la tabla armas pero eso si esta creada.
+					if(arma > 0) {
+						teamController.mostrararmas();
+					}else{
+						System.out.println("No se ha encontrado ninguna arma registrada");
+					}
+					// dbaccessor.mostraRevistesArticlesAutors();
+					break;
 
-			case 4:
-				//aqui creamos la tabla region.
-				teamController.crearRegion();
-				region = 1;
-				// dbaccessor.altaAutor();
-				break;
+				case 4:
+					//aqui creamos la tabla region.
+					teamController.crearRegion();
+					region = 1;
 
-			case 5:
-				//aqui creamos la tabla personaje.
-				teamController.crearPersonaje();
-				personaje = 1;
-				// dbaccessor.altaRevista();
-				break;
+					// dbaccessor.altaAutor();
+					break;
 
-			case 6:
-				//aqui creamos la tabla armas.
-				teamController.crearArma();
-				arma = 1;
-				// dbaccessor.altaArticle();
-				break;
+				case 5:
+					//aqui creamos la tabla personaje.
+					teamController.crearPersonaje();
+					personaje = 1;
+					// dbaccessor.altaRevista();
+					break;
 
-			case 7:
-				//aqui creamos los persoanjes que queramos dentro de la tabla personaje.
-				if(personaje > 0) {
+				case 6:
+					//aqui creamos la tabla armas.
+					teamController.crearArma();
+					arma = 1;
 
-					teamController.readPersonajesFromCSVAndInsert();
-					valorpersonaje =+ 1;
-				}else{
-					System.out.println("No se puede ejecutar esta opcion");
-				}
-				// dbaccessor.actualitzarTitolRevistes(conn);
-				break;
+					// dbaccessor.altaArticle();
+					break;
 
-			case 8:
-				//aqui creamos las regiones que queramos dentro de la tabla regiones.
-				if(region > 0) {
+				case 7:
+					//aqui creamos los persoanjes que queramos dentro de la tabla personaje.
+					if(personaje > 0) {
 
-					teamController.readRegionFromCSVAndInsert();
-					valorregion =+ 1;
-				}else{
-					System.out.println("No se puede ejecutar esta opcion");
-				}
+						teamController.readPersonajesFromCSVAndInsert();
+						valorpersonaje =+ 1;
 
-				// dbaccessor.afegeixArticleARevista(conn);
-				break;
+					}else{
+						System.out.println("No se puede ejecutar esta opcion");
+					}
+					// dbaccessor.actualitzarTitolRevistes(conn);
+					break;
 
-			case 9:
-				//aqui creamos las armas que queramos dentro de la tabla armas
-				if(arma > 0) {
+				case 8:
+					//aqui creamos las regiones que queramos dentro de la tabla regiones.
+					if(region > 0) {
 
-					teamController.readArmasFromCSVAndInsert();
-					valorarma =+ 1;
-				}else{
-					System.out.println("No se puede ejecutar esta opcion");
-				}
-				// dbaccessor.desassignaArticleARevista(conn);
-				break;
+						teamController.readRegionFromCSVAndInsert();
+						valorregion =+ 1;
 
-			case 10:
-				//aqui borramos los personjes dentro de la tabla personajes
-				if(valorpersonaje > 0) {
-					teamController.DeletePersonajes();
-					valorpersonaje =- 1;
-				}else{
-					System.out.println("No existe nada para borrar");
-				}
-				break;
+					}else{
+						System.out.println("No se puede ejecutar esta opcion");
+					}
 
-			case 11:
-				//aqui borramos las regiones dentro de la tabla regiones
-				if(valorregion > 0) {
-					teamController.DeleteRegion();
-					valorregion =- 1;
-				}else{
-					System.out.println("No existe nada para borrar");
-				}
-				break;
+					// dbaccessor.afegeixArticleARevista(conn);
+					break;
+
+				case 9:
+					//aqui creamos las armas que queramos dentro de la tabla armas
+					if(arma > 0) {
+
+						teamController.readArmasFromCSVAndInsert();
+						valorarma =+ 1;
+
+					}else{
+						System.out.println("No se puede ejecutar esta opcion");
+					}
+					// dbaccessor.desassignaArticleARevista(conn);
+					break;
+
+				case 10:
+					//aqui borramos los personjes dentro de la tabla personajes
+					if(valorpersonaje > 0) {
+						teamController.DeletePersonajes();
+						valorpersonaje =- 1;
+
+					}else{
+						System.out.println("No existe nada para borrar");
+					}
+					break;
+
+				case 11:
+					//aqui borramos las regiones dentro de la tabla regiones
+					if(valorregion > 0) {
+						teamController.DeleteRegion();
+						valorregion =- 1;
+
+					}else{
+						System.out.println("No existe nada para borrar");
+					}
+					break;
 				case 12:
 					if(valorarma > 0) {
 						//aqui borramos las armas dentro de la tabla armas.
@@ -170,7 +177,7 @@ public class ACBMain {
 					break;
 				case 13:
 					//aqui borramos la tabla personajes
-					if(personaje < 0){
+					if(personaje > 0){
 						teamController.borrarPersonaje();
 						personaje = 0;
 					}else{
@@ -179,7 +186,7 @@ public class ACBMain {
 					break;
 				case 14:
 					//aqui borramos la tabla regiones
-					if(region < 0){
+					if(region > 0){
 						teamController.borrarRegion();
 						region = 0;
 					}else{
@@ -188,9 +195,10 @@ public class ACBMain {
 					break;
 				case 15:
 					//aqui borramos la tabla armas
-					if(arma < 0) {
+					if(arma > 0) {
 						teamController.borrarArmas();
 						arma = 0;
+
 					}else{
 						System.out.println("No existe ninguna tabla Armas");
 					}
@@ -210,10 +218,10 @@ public class ACBMain {
 					//aqui podremos salir del programa.
 					System.exit(0);
 					break;
-			default:
-				//esto nos mostrara un texto por si no elegimos ninguna de las opciones disponibles.
-				System.out.println("Introdueixi una de les opcions anteriors");
-				break;
+				default:
+					//esto nos mostrara un texto por si no elegimos ninguna de las opciones disponibles.
+					System.out.println("Introdueixi una de les opcions anteriors");
+					break;
 
 			}
 			option = menu.mainMenu();
@@ -222,3 +230,4 @@ public class ACBMain {
 	}
 
 }
+
