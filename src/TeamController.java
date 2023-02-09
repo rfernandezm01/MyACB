@@ -17,7 +17,94 @@ public class TeamController {
 		this.connection = connection;
 	}
 
+	public void DeleteRegion () throws SQLException {
+		//esto borra las regiones dentro de la tabla Regiones
+
+		ArrayList<ArrayList<String>> regiones =  readAllDataAtOnce("Regiónes.csv");
+
+		String sql = "DELETE Region (RegionID,Nombre,Habitantes,Elemento,Nombrearconte,Mundo,PersonajeID) VALUES (?,?,?,?,?,?,?)";
+		PreparedStatement pst = connection.prepareStatement(sql);
+
+		// Elimina la fila de las cabeceras
+		regiones.remove(0);
+
+		for (ArrayList<String> fila : regiones) {
+
+			pst.clearParameters();
+			pst.setInt(1, Integer.parseInt(fila.get(0)));
+			pst.setString(2, fila.get(1));
+			pst.setInt(3, Integer.parseInt(fila.get(2)));
+			pst.setString(4, fila.get(3));
+			pst.setString(5, fila.get(4));
+			pst.setString(6, fila.get(5));
+			pst.setInt(8, Integer.parseInt(fila.get(6)));
+			pst.executeUpdate();
+
+		}
+
+		pst.close();
+	}
+
+	public void DeletePersonajes () throws SQLException {
+		//esto borra los Personajes dentro de la tabla Personajes
+
+		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("personajes.csv");
+
+		String sql = "DELETE Personaje (PersonajeID,Nombre,Numeroestrellas,TipodeArma,Elemento,Sexo,Región,ArmaID,RegiónID) VALUES (?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pst = connection.prepareStatement(sql);
+
+		// Elimina la fila de las cabeceras
+		personajes.remove(0);
+
+		for (ArrayList<String> fila : personajes) {
+
+			pst.clearParameters();
+			pst.setInt(1, Integer.parseInt(fila.get(0)));
+			pst.setString(2, fila.get(1));
+			pst.setInt(3, Integer.parseInt(fila.get(2)));
+			pst.setString(4, fila.get(3));
+			pst.setString(5, fila.get(4));
+			pst.setString(6, fila.get(5));
+			pst.setString(7, fila.get(6));
+			pst.setInt(8, Integer.parseInt(fila.get(7)));
+			pst.setInt(9, Integer.parseInt(fila.get(8)));
+			pst.executeUpdate();
+
+		}
+
+		pst.close();
+	}
+
+	public void DeleteArmas() throws SQLException, IOException {
+		//esto borra las Armas dentro de la tabla Armas
+
+		ArrayList<ArrayList<String>> armas =  readAllDataAtOnce("Armas.csv");
+
+		String sql = "DELETE Armas (ArmaID,Tipodearma,Nombre,Numeroestrellas,PuntosAtaque,PersonajeID) VALUES (?,?,?,?,?,?)";
+		PreparedStatement pst = connection.prepareStatement(sql);
+
+		// Elimina la fila de las cabeceras
+		armas.remove(0);
+
+		for (ArrayList<String> fila : armas) {
+
+			pst.clearParameters();
+			pst.setInt(1, Integer.parseInt(fila.get(0)));
+			pst.setString(2, fila.get(1));
+			pst.setString(3, fila.get(2));
+			pst.setInt(4, Integer.parseInt(fila.get(3)));
+			pst.setInt(5, Integer.parseInt(fila.get(4)));
+			pst.setInt(6, Integer.parseInt(fila.get(5)));
+			pst.executeUpdate();
+
+		}
+
+		pst.close();
+	}
+
+
 	public void borrartodo() throws SQLException, IOException {
+		//esto borra toda la base de datos.
 
 		Statement st = connection.createStatement();
 		ResultSet rs = null;
@@ -33,11 +120,13 @@ public class TeamController {
 		try { st.executeUpdate("DROP TABLE Armas");} catch (SQLException e) {}
 
 
+
 		rs.close();
 		st.close();
 	}
 
 	public void borrarRegion() throws SQLException, IOException {
+		//borra la tabla region
 
 		Statement st = connection.createStatement();
 		ResultSet rs = null;
@@ -49,6 +138,7 @@ public class TeamController {
 	}
 
 	public void borrarPersonaje() throws SQLException, IOException {
+		//borra la tabla personajes
 
 		Statement st = connection.createStatement();
 		ResultSet rs = null;
@@ -59,6 +149,7 @@ public class TeamController {
 		st.close();
 	}
 	public void borrarArmas() throws SQLException, IOException {
+		//borra la tabla armas
 
 		Statement st = connection.createStatement();
 		ResultSet rs = null;
@@ -69,6 +160,7 @@ public class TeamController {
 		st.close();
 	}
 	public void mostrarregion() throws SQLException, IOException {
+		//muestra la tabla region
 
 		Statement st = connection.createStatement();
 		ResultSet rs;
@@ -79,17 +171,11 @@ public class TeamController {
 		st.close();
 	}
 	public void mostrarpersonaje() throws SQLException, IOException {
+		//muestra la tabla personajes
 		Statement st = connection.createStatement();
 		ResultSet rs;
 
 		rs = st.executeQuery("SELECT * FROM Personaje");
-		while (rs.next()) {
-			System.out.println("Name: " + rs.getString("name") + " " +
-					"Type: " + rs.getString("type") + " " +
-					"Country: " + rs.getString("country") + " " +
-					"City: " + rs.getString("city") + " " +
-					"Court name: " + rs.getString("court_name"));
-		}
 
 		rs.close();
 		st.close();
@@ -97,17 +183,11 @@ public class TeamController {
 	}
 
 	public void mostrararmas() throws SQLException, IOException {
+		//muestra la tabla armas
 		Statement st = connection.createStatement();
 		ResultSet rs;
 
 		rs = st.executeQuery("SELECT * FROM Armas");
-		while (rs.next()) {
-			System.out.println("Name: " + rs.getString("name") + " " +
-					"Type: " + rs.getString("type") + " " +
-					"Country: " + rs.getString("country") + " " +
-					"City: " + rs.getString("city") + " " +
-					"Court name: " + rs.getString("court_name"));
-		}
 
 		rs.close();
 		st.close();
@@ -115,6 +195,7 @@ public class TeamController {
 	}
 
 	public void crearRegion() throws SQLException, IOException {
+		//creamos la tabla region
 		Statement st = connection.createStatement();
 		ResultSet rs;
 
@@ -126,6 +207,7 @@ public class TeamController {
 	}
 
 	public void crearPersonaje() throws SQLException, IOException {
+		//creamos la tabla personajes
 		Statement st = connection.createStatement();
 		ResultSet rs;
 
@@ -138,6 +220,7 @@ public class TeamController {
 		st.close();
 	}
 	public void crearArma() throws SQLException, IOException {
+		//creamos la tabla armas
 		Statement st = connection.createStatement();
 		ResultSet rs;
 
@@ -150,6 +233,7 @@ public class TeamController {
 
 
 	public void readPersonajesFromCSVAndInsert () throws SQLException {
+		//creamos personajes dentro de la tabla personajes
 
 		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("personajes.csv");
 
@@ -179,16 +263,17 @@ public class TeamController {
 	}
 
 	public void readRegionFromCSVAndInsert () throws SQLException {
+		//creamos las regiones dentro de la tabla regiones
 
-		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("Regiónes.csv");
+		ArrayList<ArrayList<String>> regiones =  readAllDataAtOnce("Regiónes.csv");
 
 		String sql = "INSERT INTO Region (RegionID,Nombre,Habitantes,Elemento,Nombrearconte,Mundo,PersonajeID) VALUES (?,?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
 
 		// Elimina la fila de las cabeceras
-		personajes.remove(0);
+		regiones.remove(0);
 
-		for (ArrayList<String> fila : personajes) {
+		for (ArrayList<String> fila : regiones) {
 
 			pst.clearParameters();
 			pst.setInt(1, Integer.parseInt(fila.get(0)));
@@ -206,16 +291,17 @@ public class TeamController {
 	}
 
 	public void readArmasFromCSVAndInsert () throws SQLException {
+		//creamos las armas dentro de la tabla armas
 
-		ArrayList<ArrayList<String>> personajes =  readAllDataAtOnce("Armas.csv");
+		ArrayList<ArrayList<String>> armas =  readAllDataAtOnce("Armas.csv");
 
-		String sql = "INSERT INTO Personaje (ArmaID,Tipodearma,Nombre,Numeroestrellas,PuntosAtaque,PersonajeID) VALUES (?,?,?,?,?,?)";
+		String sql = "INSERT INTO Armas (ArmaID,Tipodearma,Nombre,Numeroestrellas,PuntosAtaque,PersonajeID) VALUES (?,?,?,?,?,?)";
 		PreparedStatement pst = connection.prepareStatement(sql);
 
 		// Elimina la fila de las cabeceras
-		personajes.remove(0);
+		armas.remove(0);
 
-		for (ArrayList<String> fila : personajes) {
+		for (ArrayList<String> fila : armas) {
 
 			pst.clearParameters();
 			pst.setInt(1, Integer.parseInt(fila.get(0)));
